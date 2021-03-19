@@ -1,0 +1,82 @@
+---
+title: "Incidence of Ampicillin-Resistant Escherichia coli in Marine and Freshwater Environments"
+author: "Kristine Gesulga"
+date: "3/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r Load libraries, echo = FALSE, results = 'hide', error = FALSE, warning = FALSE, message = FALSE}
+library(ggplot2)
+library(dplyr)
+library(plyr)
+library(reshape)
+library(splitstackshape)
+library(Hmisc)
+library(data.table) 
+library(DT)
+library(gt)
+library(paletteer)
+library(RColorBrewer)
+library(scales)
+```
+
+## Confirmation of E. coli strains via Biochemical Testing {.tabset}
+
+### Los Cerritos Channel
+
+```{r Read in and tidy data, echo = FALSE, results = 'hide', error = FALSE, warning = FALSE, message = FALSE}
+lcc_rawdata <- read.csv("ecoli_testlog_lcc.csv", header=TRUE, na.strings=c("","NA"))
+head (lcc_rawdata)
+
+lcc_clean <- subset(lcc_rawdata, select=c(ï..isolate,citrate,phenol_red_lac,S,I,M,MR,VP,ecoli_confirm))
+lcc_clean <- rename(lcc_clean,c(
+    "ï..isolate" = "Isolate",
+    "citrate" = "Simmons Citrate",
+    "phenol_red_lac" = "Phenol Red with Lactose",
+    "S" = "Sulfur",
+    "I" = "Indole",
+    "M" = "Motility",
+    "MR" = "MR",
+    "VP" = "VP"))
+head(lcc_clean)
+```
+
+```{r LCC table, echo = FALSE}
+lcc_table <- 
+  lcc_clean %>% 
+  gt() %>% 
+  tab_header(title = "Biochemical Test Results from Isolates Collected from Los Cerritos Channel") %>% 
+  tab_source_note("NA = Ruled out due the result of other test(s)") %>%  #md() and `` to change font to Courier
+  cols_label("Simmons Citrate" = html("Simmons<br>Citrate"),
+    "Phenol Red with Lactose" = html("Phenol Red<br>with Lactose"),
+    ecoli_confirm = "E. coli?") %>% 
+  cols_align("center") %>% 
+  tab_style(
+    style = list(
+      cell_fill(color = "#E0ECF4")),
+    locations = cells_body(
+      rows = ecoli_confirm == "Y")) %>% 
+  tab_spanner(label = "Biochemial Tests",
+              columns = vars("Simmons Citrate", "Phenol Red with Lactose", "Sulfur", "Indole", "Motility", "MR", "VP"))
+
+gt
+```
+
+
+
+```{r Read in and tidy data, echo = FALSE, results = 'hide', error = FALSE, warning = FALSE, message = FALSE}
+
+
+```
+
+
+### Mother's Beach (Alamitos Bay)
+
+This is tab 2 text
+
+
